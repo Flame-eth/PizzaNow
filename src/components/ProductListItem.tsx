@@ -1,9 +1,10 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
 
 import { Text, View } from '@/components/Themed';
 import Colors from '@/constants/Colors';
 import { FC } from 'react';
 import { ProductType } from '@/types';
+import { Link } from 'expo-router';
 
 
 interface ProductListItemProps {
@@ -12,14 +13,16 @@ interface ProductListItemProps {
 const ProductListItem: FC<ProductListItemProps> = ({
     product
 }) => {
-  return (
-    <View style={styles.container}>
+    return (
+      <Link href={`/(tabs)/menu/${product.id}`} asChild >
+    <Pressable style={styles.container}>
       <Image style={styles.image} source={{uri: product.image}} resizeMode="contain" />
       <Text style={styles.title}> {product.name} </Text>
       <Text style={styles.price}>
         ${product.price}
       </Text>
-    </View>
+    </Pressable>
+        </Link>
   );
 }
 
