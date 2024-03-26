@@ -1,27 +1,97 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import React from "react";
+import { Stack, useLocalSearchParams } from "expo-router";
+import { ProductType } from "@/types";
+import products from "@assets/data/products";
+import Colors from "@/constants/Colors";
 
-const Product = () => {
-  const { id } = useLocalSearchParams()
+const sizes: string[] = ["S", "M", "L", "XL"];
+
+const ProductDetailsScreen = () => {
+  const { id } = useLocalSearchParams();
+
+  const [selectedSize, setSelectedSize] = React.useState<string>("M");
+
+  const product: ProductType | undefined = products.find(
+    (product) => product.id.toString() === id
+  );
+
+  if (!product) {
+    return <Text>Product not found</Text>;
+  }
   return (
-    <View>
-      <Text style={{
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        margin: 20,
-        color: 'blue'
-      
-      }}>Product Test</Text>
-      <Text style={{
-        fontSize: 16,
-        textAlign: 'center',
-        color: 'white'
-      
-      }}>Product ID: {id}</Text>
-    </View>
-  )
-}
+    <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          title: product?.name,
+        }}
+      />
+      <Image source={{ uri: product.image }} style={styles.image} />
 
-export default Product
+      <Text style={styles.title}>Select Size</Text>
+      <View style={styles.sizes}>
+        {sizes.map((size) => (
+          <Pressable 
+          onPress={() => setSelectedSize(size)}
+          style={[styles.size, {
+            backgroundColor: selectedSize === size ? "gainsboro" : "white"
+          }]} key={size}>
+            <Text style={[styles.sizeText, {
+              color: selectedSize === size ? "black" : "gray"
+            }]}>{size}</Text>
+          </Pressable>
+        ))}
+      </View>
+      <Text style={styles.price}>${product.price}</Text>
+    </View>
+  );
+};
+
+export default ProductDetailsScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 20,
+    flex: 1,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginVertical: 10,
+    color: "black",
+    padding: 0,
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: "80%",
+  },
+  price: {
+    // color: Colors.light.tint,
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  image: {
+    width: "100%",
+    aspectRatio: 1,
+  },
+  sizes: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 10,
+  },
+  size: {
+    backgroundColor: "gainsboro",
+    width: 50,
+    aspectRatio: 1,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sizeText: {
+    fontSize: 20,
+    fontWeight: "500",
+  },
+});
