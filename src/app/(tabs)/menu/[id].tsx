@@ -4,6 +4,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { ProductType } from "@/types";
 import products from "@assets/data/products";
 import Colors from "@/constants/Colors";
+import Button from "@components/Button";
 
 const sizes: string[] = ["S", "M", "L", "XL"];
 
@@ -16,6 +17,10 @@ const ProductDetailsScreen = () => {
     (product) => product.id.toString() === id
   );
 
+  const addToCart = () => {
+    console.warn("Added to cart, size: ", selectedSize);
+
+  }
   if (!product) {
     return <Text>Product not found</Text>;
   }
@@ -43,6 +48,8 @@ const ProductDetailsScreen = () => {
         ))}
       </View>
       <Text style={styles.price}>${product.price}</Text>
+      <Button text="Add to Cart" onPress={addToCart} />
+
     </View>
   );
 };
@@ -72,6 +79,7 @@ const styles = StyleSheet.create({
     // color: Colors.light.tint,
     fontWeight: "bold",
     fontSize: 18,
+    marginTop: "auto"
   },
   image: {
     width: "100%",
