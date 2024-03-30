@@ -1,6 +1,6 @@
 import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import React from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { PizzaSizeType, ProductType } from "@/types";
 import products from "@assets/data/products";
 import Colors from "@/constants/Colors";
@@ -19,11 +19,14 @@ const ProductDetailsScreen = () => {
   );
 
   const {addItem} = useCart();
+  const router = useRouter();
 
   const addToCart = () => {
     // console.warn("Added to cart, size: ", selectedSize);
+    // console.log(product, selectedSize)
     if(!product) return;
     addItem(product, selectedSize);
+    router.navigate("/cart")
 
   }
   if (!product) {
